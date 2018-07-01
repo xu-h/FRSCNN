@@ -20,4 +20,5 @@ sub_img_size = {
 }
 
 train_dataset = '91-image'
-test_dataset = 'set5'
+test_dataset = ['set5']
+batch_size = 64
