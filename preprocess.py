@@ -2,16 +2,12 @@
 import argparse
 import glob
 import math
-import os
-import pdb
-import sys
-from pathlib import WindowsPath as Path
 
-import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 
 import config
+
 
 def expand(img):
     """Expand dataset by scaling and rotation."""
@@ -65,7 +61,7 @@ def preprocess(dataset, is_expand, scale):
     label = []
 
     for img_path in glob.glob(dataset):
-        print('Processing ' + img_path)
+        print(f'Processing {img_path}')
         img = Image.open(img_path).convert('L')
         if is_expand:
             imgs = expand(img)
