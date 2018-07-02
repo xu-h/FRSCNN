@@ -1,5 +1,6 @@
 import time
 from pathlib import WindowsPath as Path
+from pprint import pprint
 
 import numpy as np
 import tensorflow as tf
@@ -9,7 +10,6 @@ from PIL import Image
 import config
 from preprocess import preprocess
 from utils import load_dataset, prelu, save_result
-from pprint import pprint
 
 
 def FSRCNN_fn(features, labels, mode, params):
@@ -177,7 +177,7 @@ class FSRCNN(object):
 
 if __name__ == '__main__':
     scale = 2
-    train_step = 300
+    train_step = 10000
     model_dir = 'model/FSRCNN1'
 
     # train
@@ -210,4 +210,3 @@ if __name__ == '__main__':
         print('no\tFSRCNN\tBicubic')
         for p in performance[test_dataset]:
             print(f'{p[0]: 2d}\t{p[1]:>.4f}\t{p[2]:.4f}\t{p[3]:>.4f}\t{p[4]:.4f}')
-

@@ -3,8 +3,14 @@
 dataset = {
     '91-image': '../dataset/91-image/*.bmp',
     'general-100': '../dataset/General-100/*.bmp',
-    'set5': '../dataset/Set5/image_SRF_2/*HR.png',
-    'set14': '../dataset/Set14/image_SRF_2/*HR.png',
+    'set5': [
+        '../dataset/Set5/image_SRF_2/*LR.png',
+        '../dataset/Set5/image_SRF_2/*HR.png',
+    ],
+    'set14': [
+        '../dataset/Set14/image_SRF_2/*LR.png',
+        '../dataset/Set14/image_SRF_2/*HR.png',
+    ],
 }
 
 expand = {

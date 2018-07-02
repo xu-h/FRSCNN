@@ -31,15 +31,16 @@ def prelu(_x):
 def load_dataset(dataset, scale):
     data = []
     label = []
-    img_glob = config.dataset[dataset]
-    print(f'Loading images: {img_glob}')
-    for img_path in glob.glob(img_glob):
+    lr_glob, hr_glob = config.dataset[dataset]
+    print(f'Loading images: {lr_glob} {hr_glob}')
+    for img_path in glob.glob(lr_glob):
         img = Image.open(img_path).convert('L')
         w, h = img.size
-        new_w, new_h = w * scale, h * scale
-        new_img = img.resize((new_w, new_h))
         data.append(np.array(img.getdata()).reshape((1, h, w)))
-        label.append(np.array(new_img.getdata()).reshape((1, new_h, new_w)))
+    for img_path in glob.glob(hr_glob):
+        img = Image.open(img_path).convert('L')
+        w, h = img.size
+        label.append(np.array(img.getdata()).reshape((1, h, w)))
     return data, label
 
 
