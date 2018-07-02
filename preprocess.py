@@ -7,6 +7,7 @@ import numpy as np
 from PIL import Image
 
 import config
+from utils import progress_bar
 
 
 def expand(img):
@@ -59,9 +60,10 @@ def preprocess(dataset, is_expand, scale):
     """
     data = []
     label = []
+    img_list = list(glob.glob(dataset))
+    img_num = len(img_list)
 
-    for img_path in glob.glob(dataset):
-        print(f'Processing {img_path}')
+    for i, img_path in enumerate(img_list):
         img = Image.open(img_path).convert('L')
         if is_expand:
             imgs = expand(img)
@@ -72,6 +74,7 @@ def preprocess(dataset, is_expand, scale):
             data_slice, label_slice = crop_sub_images(img, scale)
             data.append(data_slice)
             label.append(label_slice)
+        print('Preprocessing', progress_bar(i, img_num), end='\r')
     # concatenate sub images of all images
     data = np.concatenate(data)
     label = np.concatenate(label)
@@ -92,5 +95,5 @@ if __name__ == '__main__':
     data, label = preprocess(config.dataset[args.dataset], False, args.scale)
     
     print(data.shape, label.shape)
-    np.save('data.npy', data)
-    np.save('label.npy', label)
+    # np.save('data.npy', data)
+    # np.save('label.npy', label)
