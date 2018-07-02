@@ -3,6 +3,7 @@ import glob
 import numpy as np
 import tensorflow as tf
 from PIL import Image
+import scipy
 
 import config
 
@@ -42,20 +43,19 @@ def load_dataset(dataset, scale):
     return data, label
 
 
-def save_prediction():
-    result_path = Path(f'./result-{scale}')
-    if not result_path.exists():
-        result_path.mkdir()
-
-    for result in predict_result:
-        scipy.misc.imsave(result_path / f'{i}.png', result['labels'].squeeze())
-        # cnn result
-        psnr = round(float(result['cnn_psnr']), 4)
-        ssim = round(float(result['cnn_ssim']), 4)
-        scipy.misc.imsave(result_path / f'{i}-{psnr}-{ssim}.png',
-                          result['cnn_img'].squeeze())
-        # bicubic result
-        psnr = round(float(result['bi_psnr']), 4)
-        ssim = round(float(result['bi_ssim']), 4)
-        scipy.misc.imsave(result_path / f'{i}-bicubic-{psnr}-{ssim}.png',
-                          result['bi_img'].squeeze())
+def save_result(result, path, name):
+    scipy.misc.imsave(path / f'{name}.png', result['labels'].squeeze())
+    # cnn result
+    psnr = round(float(result['cnn_psnr']), 4)
+    ssim = round(float(result['cnn_ssim']), 4)
+    scipy.misc.imsave(
+        path / f'{name}-{psnr}-{ssim}.png',
+        result['cnn_img'].squeeze()
+    )
+    # bicubic result
+    psnr = round(float(result['bi_psnr']), 4)
+    ssim = round(float(result['bi_ssim']), 4)
+    scipy.misc.imsave(
+        path / f'{name}-bicubic-{psnr}-{ssim}.png',
+        result['bi_img'].squeeze()
+    )
