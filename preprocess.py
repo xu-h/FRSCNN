@@ -8,6 +8,7 @@ from PIL import Image
 
 import config
 from utils import progress_bar
+import time
 
 
 def expand(img):
@@ -29,8 +30,8 @@ def crop_sub_images(img, scale):
     scale_img = img.resize((scale_w, scale_h), Image.BICUBIC)
     
     # conver to numpy
-    img = np.array(img.getdata()).reshape((h, w)) / 255
-    scale_img = np.array(scale_img.getdata()).reshape((scale_h, scale_w)) / 255
+    img = np.array(img.getdata()).reshape((h, w))
+    scale_img = np.array(scale_img.getdata()).reshape((scale_h, scale_w))
 
     # generate sub imgs
     scale_size, img_size = config.sub_img_size[scale]
@@ -60,9 +61,12 @@ def preprocess(dataset, is_expand, scale):
     """
     data = []
     label = []
-    img_list = list(glob.glob(dataset))
+    img_glob = config.dataset[dataset]
+    img_list = list(glob.glob(img_glob))
     img_num = len(img_list)
 
+    t = time.time()
+    print(f'Preprecessing images {img_glob} ...')
     for i, img_path in enumerate(img_list):
         img = Image.open(img_path).convert('L')
         if is_expand:
@@ -74,8 +78,9 @@ def preprocess(dataset, is_expand, scale):
             data_slice, label_slice = crop_sub_images(img, scale)
             data.append(data_slice)
             label.append(label_slice)
-        print('Preprocessing', progress_bar(i, img_num), end='\r')
-    print('Preprocessing', progress_bar(img_num, img_num), end='\r')
+        print('Progress', progress_bar(i, img_num), end='\r')
+    t = time.time() - t
+    print('Progress', progress_bar(img_num, img_num), f'{t:.2f}sec', end='\r')
     print()
     # concatenate sub images of all images
     data = np.concatenate(data)
@@ -94,6 +99,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # TODO After expanding the dataset, sub images consumes too much memory
-    data, label = preprocess(config.dataset[args.dataset], False, args.scale)
+    data, label = preprocess(args.dataset, False, args.scale)
     
     print(data.shape, label.shape)

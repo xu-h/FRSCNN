@@ -191,7 +191,7 @@ class FSRCNN(object):
 
 if __name__ == '__main__':
     scale = 2
-    train_step = 300000
+    train_step = 300000 
 
     # train
     train_data, train_label = preprocess(config.train_dataset, False, 2)
@@ -199,11 +199,12 @@ if __name__ == '__main__':
     print('train label: %d x (%d, %d)' % train_label.shape)
     
     model = FSRCNN('model/FSRCNN1', scale)
-    model.train(train_data, train_label, config.batch_size, train_step)
+    # model.train(train_data, train_label, config.batch_size, train_step)
 
     # test
     for test_dataset in config.test_dataset:
-        test_data, test_label = load_dataset(test_dataset)
+        test_data, test_label = load_dataset(test_dataset, scale)
         for lr_img, hr_img in zip(test_data, test_label):
-            result = model.predict(lr_img, hr_img)
-            save_prediction(result)
+            print(lr_img.shape, hr_img.shape)
+            # result = model.predict(lr_img, hr_img)
+            # save_prediction(result)
