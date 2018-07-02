@@ -75,6 +75,8 @@ def preprocess(dataset, is_expand, scale):
             data.append(data_slice)
             label.append(label_slice)
         print('Preprocessing', progress_bar(i, img_num), end='\r')
+    print('Preprocessing', progress_bar(img_num, img_num), end='\r')
+    print()
     # concatenate sub images of all images
     data = np.concatenate(data)
     label = np.concatenate(label)
@@ -95,5 +97,3 @@ if __name__ == '__main__':
     data, label = preprocess(config.dataset[args.dataset], False, args.scale)
     
     print(data.shape, label.shape)
-    # np.save('data.npy', data)
-    # np.save('label.npy', label)
